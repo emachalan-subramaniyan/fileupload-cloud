@@ -1,47 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloProvider } from 'react-apollo';
 import App from './App';
-import ApolloClient from 'apollo-client';
-import { HttpLink } from 'apollo-link-http';
+import { ApolloClient, ApolloProvider, InMemoryCache, HttpLink } from '@apollo/client';
 import { WebSocketLink } from 'apollo-link-ws';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 
-const GRAPHQL_ENDPOINT = "https://hasura-realtime-group-chat.herokuapp.com/v1alpha1/graphql";
 
-// Make WebSocketLink with appropriate url
-const mkWsLink = (uri) => {
-  const splitUri = uri.split('//');
-  const subClient = new SubscriptionClient(
-    'wss://' + splitUri[1],
-    { reconnect: true }
-  );
-  return new WebSocketLink(subClient);
-}
+ const httpsLink = new HttpLink({
+  uri: 'https://rested-viper-15.hasura.app/v1/graphql',
+  headers: {
+    'x-hasura-admin-secret': "xckv5KIGc49wB3KJxm0en4HzlyQcl4BlJLQ3NOoMAN3T33Lv1W7m7i1hHoG12f5X"
+  }
+});
 
-// Makle HttpLink
-const httpLink = new HttpLink({ uri: GRAPHQL_ENDPOINT });
-const wsLink = mkWsLink(GRAPHQL_ENDPOINT);
+const wssLink = new WebSocketLink({
+  uri: "wss://rested-viper-15.hasura.app/v1/graphql",
+  options: {
+    reconnect: true,
+    connectionParams: {
+      headers: {
+        'x-hasura-admin-secret': "xckv5KIGc49wB3KJxm0en4HzlyQcl4BlJLQ3NOoMAN3T33Lv1W7m7i1hHoG12f5X"
+      }
+    }
+  }
+});
+
 const link = split(
-  // split based on operation type
   ({ query }) => {
-    const { kind, operation } = getMainDefinition(query);
-    return kind === 'OperationDefinition' && operation === 'subscription';
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
   },
-  wsLink,
-  httpLink
+  wssLink,
+  httpsLink
 );
 
-// Instantiate client
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache({
-    addTypename: false
-  })
-})
+const createApolloClient = () => {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link
+  });
+};
+
+const client = createApolloClient();
 
 ReactDOM.render(
   (<ApolloProvider client={client}>

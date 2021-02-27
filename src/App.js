@@ -1,8 +1,19 @@
 import logo from './logo.svg';
 import React, { Component }  from 'react';
 import './App.css';
+import { useQuery, gql } from '@apollo/client';
+
+const GRAPHQL_QUERY = gql`
+query MyQuery {
+  user {
+    id
+    username
+  }
+}`;
 
 function App() {
+  const { data, loading, error } = useQuery(GRAPHQL_QUERY);
+  console.log('data data', data, loading, error);
   return (
     <div className="App">
       <header className="App-header">
