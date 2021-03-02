@@ -5,6 +5,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache, HttpLink } from '@apollo/c
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
+// import { createUploadLink } from 'apollo-upload-client'
 
 
  const httpsLink = new HttpLink({
