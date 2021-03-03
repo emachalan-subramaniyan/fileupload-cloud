@@ -1,22 +1,25 @@
 import React, { useState, useEffect }  from 'react';
 import './App.css';
-import GooglePicker from 'react-google-picker';
 // import { useMutation, useQuery, gql } from '@apollo/client';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import{ AppBar , Toolbar, IconButton, Typography, InputBase, Badge, Menu, MenuItem}from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import UploadData from './components/uploadData';
+import About from './components/about';
+import Contact from './components/contact';
+import Login from './components/login';
+import Register from './components/register';
 
 // const GRAPHQL_QUERY = gql`
 // query MyQuery {
@@ -99,6 +102,10 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  link_style: {
+    textDecoration: 'none',
+    color: 'white'
+  }
 }));
 
 const App = () => {
@@ -211,6 +218,7 @@ const App = () => {
   // console.log('accesstoken', 'Bearer '+ " " +String(state.accessToken))
 
   return (
+    <Router>
     <div className="App">
       <AppBar position="static">
         <Toolbar>
@@ -223,33 +231,45 @@ const App = () => {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            FileUploader
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+              <Link to="/upload-data" className={classes.link_style}>
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
+                <Typography variant="body2" noWrap>
+                  Upload Data
+                </Typography>
             </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+              </Link>
+              <Link to="/about" className={classes.link_style}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+                <Typography variant="body2" noWrap>
+                  About
+                </Typography>
             </IconButton>
+              </Link>
+              <Link to="/contact" className={classes.link_style}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+                <Typography variant="body2" noWrap>
+                  Contact
+                </Typography>
+            </IconButton>
+              </Link>
+              <Link to="/login" className={classes.link_style}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+                <Typography variant="body2" noWrap>
+                  Login
+                </Typography>
+            </IconButton>
+              </Link>
+              <Link to="/register" className={classes.link_style}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+                <Typography variant="body2" noWrap>
+                  Register
+                </Typography>
+            </IconButton>
+              </Link>
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -276,43 +296,25 @@ const App = () => {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
-      <GooglePicker clientId={'117392774494-cffu7uei4ain553kknt7q5vedda8nc62.apps.googleusercontent.com'}
-              developerKey={'AIzaSyBEDOzxAlvNp7bQT1347nQCdzxM3TNzEJQ'}
-              scope={['https://www.googleapis.com/auth/drive.readonly']}
-              onChange={data => console.log('on change:', data)}
-              onAuthFailed={data => console.log('on auth failed:', data)}
-              multiselect={true}
-              navHidden={true}
-              authImmediate={false}
-              viewId={'DOCS'}
-              mimeTypes={['image/png', 'image/jpeg', 'image/jpg']}
-              createPicker={ (google, oauthToken) => {
-                const googleViewId = google.picker.ViewId.DOCS;
-                const uploadView = new google.picker.DocsUploadView();
-                const docsView = new google.picker.DocsView(googleViewId)
-                    .setIncludeFolders(true)
-                    .setSelectFolderEnabled(true);
-
-                const picker = new window.google.picker.PickerBuilder()
-                .enableFeature(google.picker.Feature.SIMPLE_UPLOAD_ENABLED)
-                  .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-                    .addView(docsView)
-                    .addView(uploadView)/*DocsUploadView added*/
-                    .setOAuthToken(oauthToken)
-                    .setDeveloperKey('AIzaSyBEDOzxAlvNp7bQT1347nQCdzxM3TNzEJQ')
-                    .setCallback((data)=>{
-                      if (data.action === google.picker.Action.PICKED) {
-                          var fileId = data.docs[0].id;
-                          console.log('The user selected: ' + fileId, data.docs[0]);
-                          // picker();
-                      }
-                    });
-                picker.build().setVisible(true);
-            }}>
-            <span>Click</span>
-            <div className="google"></div>
-        </GooglePicker>
+      <Switch>
+          <Route path="/upload-data">
+            <UploadData />
+          </Route>
+          <Route path="/contact">
+            <Contact />
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+        </Switch>
     </div>
+  </Router>
   );
 }
 
