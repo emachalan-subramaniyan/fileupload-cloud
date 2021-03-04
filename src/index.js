@@ -9,19 +9,19 @@ import { getMainDefinition } from 'apollo-utilities';
 
 
  const httpsLink = new HttpLink({
-  uri: 'https://rested-viper-15.hasura.app/v1/graphql',
+  uri: 'https://fileupload-cloud.hasura.app/v1/graphql',
   headers: {
-    'x-hasura-admin-secret': "xckv5KIGc49wB3KJxm0en4HzlyQcl4BlJLQ3NOoMAN3T33Lv1W7m7i1hHoG12f5X"
+    'x-hasura-admin-secret': "iuvT4KdYjFELpe7x0teyWjK7wDsxLu9VjTQ46OGzm1v9tvpRZNpbNo4FEPjaS26i"
   }
 });
 
 const wssLink = new WebSocketLink({
-  uri: "wss://rested-viper-15.hasura.app/v1/graphql",
+  uri: "wss://fileupload-cloud.hasura.app/v1/graphql",
   options: {
     reconnect: true,
     connectionParams: {
       headers: {
-        'x-hasura-admin-secret': "xckv5KIGc49wB3KJxm0en4HzlyQcl4BlJLQ3NOoMAN3T33Lv1W7m7i1hHoG12f5X"
+        'x-hasura-admin-secret': "iuvT4KdYjFELpe7x0teyWjK7wDsxLu9VjTQ46OGzm1v9tvpRZNpbNo4FEPjaS26i"
       }
     }
   }

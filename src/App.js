@@ -1,8 +1,8 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 // import { useMutation, useQuery, gql } from '@apollo/client';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import{ AppBar , Toolbar, IconButton, Typography, InputBase, Badge, Menu, MenuItem}from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography, InputBase, Badge, Menu, MenuItem } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -20,25 +20,7 @@ import About from './components/about';
 import Contact from './components/contact';
 import Login from './components/login';
 import Register from './components/register';
-
-// const GRAPHQL_QUERY = gql`
-// query MyQuery {
-//   user {
-//     id
-//     username
-//   }
-// }`;
-
-// const SINGLE_UPLOAD = gql`
-//   mutation($file: Upload!) {
-//     singleUpload(file: $file) {
-//       filename
-//       mimetype
-//       encoding
-//       url
-//     }
-//   }
-// `;
+import UsersList from './components/usersList';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -116,29 +98,29 @@ const App = () => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const[state, setState] = useState({
+  const [state, setState] = useState({
     file: null,
     accessToken: null,
     filepath: null
   })
 
-  useEffect( async () => {
+  useEffect(async () => {
     let tokenDetails = await fetch("https://accounts.google.com/o/oauth2/token", {
-    "method": "POST",
-    "body": JSON.stringify({
+      "method": "POST",
+      "body": JSON.stringify({
         "client_id": '117392774494-cffu7uei4ain553kknt7q5vedda8nc62.apps.googleusercontent.com',
         "client_secret": '41HR6xp25UlHv94YryRUdptY',
         "refresh_token": '1//04dYB-he8ezK6CgYIARAAGAQSNwF-L9IrAO0pxmHzpSIAZnCY36AzsSrq3E4fbgJxs_rY-twAxWvRkmAc9AD5REshUCNND6SxWpQ',
         "grant_type": "refresh_token",
-    })
+      })
     });
     tokenDetails = await tokenDetails.json();
     const accessToken = tokenDetails.access_token;
     console.log('access token', accessToken)
-    if(accessToken){
-      setState({...state, accessToken: accessToken})
+    if (accessToken) {
+      setState({ ...state, accessToken: accessToken })
     }
-  },[])
+  }, [])
 
 
   const handleProfileMenuOpen = (event) => {
@@ -219,84 +201,91 @@ const App = () => {
 
   return (
     <Router>
-    <div className="App">
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            FileUploader
-          </Typography>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-              <Link to="/upload-data" className={classes.link_style}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-                <Typography variant="body2" noWrap>
-                  Upload Data
-                </Typography>
+      <div className="App">
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="open drawer"
+            >
+              <MenuIcon />
             </IconButton>
+            <Typography className={classes.title} variant="h6" noWrap>
+              FileUploader
+          </Typography>
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <Link to="/upload-data" className={classes.link_style}>
+                <IconButton aria-label="show 4 new mails" color="inherit">
+                  <Typography variant="body2" noWrap>
+                    Upload Data
+                </Typography>
+                </IconButton>
               </Link>
               <Link to="/about" className={classes.link_style}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-                <Typography variant="body2" noWrap>
-                  About
+                <IconButton aria-label="show 4 new mails" color="inherit">
+                  <Typography variant="body2" noWrap>
+                    About
                 </Typography>
-            </IconButton>
+                </IconButton>
               </Link>
               <Link to="/contact" className={classes.link_style}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-                <Typography variant="body2" noWrap>
-                  Contact
+                <IconButton aria-label="show 4 new mails" color="inherit">
+                  <Typography variant="body2" noWrap>
+                    Contact
                 </Typography>
-            </IconButton>
+                </IconButton>
               </Link>
               <Link to="/login" className={classes.link_style}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-                <Typography variant="body2" noWrap>
-                  Login
+                <IconButton aria-label="show 4 new mails" color="inherit">
+                  <Typography variant="body2" noWrap>
+                    Login
                 </Typography>
-            </IconButton>
+                </IconButton>
               </Link>
               <Link to="/register" className={classes.link_style}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-                <Typography variant="body2" noWrap>
-                  Register
+                <IconButton aria-label="show 4 new mails" color="inherit">
+                  <Typography variant="body2" noWrap>
+                    Register
                 </Typography>
-            </IconButton>
+                </IconButton>
               </Link>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-      <Switch>
+              <Link to="/users-list" className={classes.link_style}>
+                <IconButton aria-label="show 4 new mails" color="inherit">
+                  <Typography variant="body2" noWrap>
+                    Users
+                </Typography>
+                </IconButton>
+              </Link>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+        <Switch>
           <Route path="/upload-data">
             <UploadData />
           </Route>
@@ -312,9 +301,12 @@ const App = () => {
           <Route path="/register">
             <Register />
           </Route>
+          <Route path="/users-list">
+            <UsersList />
+          </Route>
         </Switch>
-    </div>
-  </Router>
+      </div>
+    </Router>
   );
 }
 

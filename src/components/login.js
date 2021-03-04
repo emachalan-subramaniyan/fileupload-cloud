@@ -59,9 +59,15 @@ const Login = () => {
     const [getUser, { loading, data, error }] = useLazyQuery(SELECT_USER);
 
     useEffect(() => {
-        if(data){
-            console.log(data.user[0])
+      if(data){
+        if(data && data.user && data.user[0]){
+            console.log(data.user[0].id)
+            localStorage.setItem('user_id', data.user[0].id);
+            setState({email: null, password: null})
+        }else{
+          alert('login failed')
         }
+      }
     },[data])
 
     if (loading) return <p>Loading ...</p>;

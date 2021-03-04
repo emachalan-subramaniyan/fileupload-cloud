@@ -21,6 +21,7 @@ const UploadData = (props) => {
           const uploadView = new google.picker.DocsUploadView();
           const docsView = new google.picker.DocsView(googleViewId)
               .setIncludeFolders(true)
+              // .setMimeTypes('application/vnd.google-apps.folder')
               .setSelectFolderEnabled(true);
 
           const picker = new window.google.picker.PickerBuilder()
@@ -33,7 +34,8 @@ const UploadData = (props) => {
               .setCallback((data)=>{
                 if (data.action === google.picker.Action.PICKED) {
                     var fileId = data.docs[0].id;
-                    console.log('The user selected: ' + fileId, data.docs[0]);
+                    console.log('The user selected: ' + fileId, data.docs[0].url);
+                    alert('copy this link and send to you friends'+"("+data.docs[0].url+")")
                     // picker();
                 }
               });
