@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 // import { useMutation, useQuery, gql } from '@apollo/client';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Typography, InputBase, Badge, Menu, MenuItem } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography, Container, Badge, Menu, MenuItem } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -13,7 +13,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory
 } from "react-router-dom";
 import UploadData from './components/uploadData';
 import About from './components/about';
@@ -21,6 +22,8 @@ import Contact from './components/contact';
 import Login from './components/login';
 import Register from './components/register';
 import UsersList from './components/usersList';
+import HomePage from './components/homePage';
+import MyProfile from './components/myProfile';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -87,12 +90,28 @@ const useStyles = makeStyles((theme) => ({
   link_style: {
     textDecoration: 'none',
     color: 'white'
+  },
+  link_style1: {
+    textDecoration: 'none',
+    color: 'black'
+  },
+  footer_div: {
+    backgroundImage: "url(" +"https://www.shopsite.com/templates/cookbook/theme-images/congruence-stripes-blue.jpg"+ ")",
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    width: "100%",
+    height: '30vh',
+    position: "absolute",
+    bottom: 0
   }
 }));
+
 
 const App = () => {
 
   const classes = useStyles();
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -151,10 +170,28 @@ const App = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <Link to="/my-profile" className={classes.link_style1}><MenuItem>Profile</MenuItem></Link>
+      <MenuItem onClick={() => onLogoutClick()}>Logout</MenuItem>
     </Menu>
   );
+
+  const onLogoutClick = () => {
+    localStorage.removeItem("user_id")
+    window.location.reload();
+  }
+
+  const Copyright = () => {
+    return (
+      <Typography variant="body2" color="textSecondary">
+        {'Copyright © '}
+        <Link color="inherit" href="https://material-ui.com/">
+          Your Website
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -212,9 +249,11 @@ const App = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" noWrap>
-              FileUploader
-          </Typography>
+            <Link to="/" className={classes.link_style}>
+              <Typography className={classes.title} variant="h6" noWrap>
+                  FileUploader
+              </Typography>
+            </Link>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <Link to="/upload-data" className={classes.link_style}>
@@ -286,6 +325,9 @@ const App = () => {
         {renderMobileMenu}
         {renderMenu}
         <Switch>
+          {/* <Route path="/">
+            <HomePage />
+          </Route> */}
           <Route path="/upload-data">
             <UploadData />
           </Route>
@@ -304,7 +346,19 @@ const App = () => {
           <Route path="/users-list">
             <UsersList />
           </Route>
+          <Route path="/my-profile">
+            <MyProfile />
+          </Route>
+          <Route path="/">
+            <HomePage />
+          </Route>
         </Switch>
+        {/* <div className={classes.footer_div}>
+            <Container maxWidth="sm">
+              <Typography variant="body1">My sticky footer can be found here.</Typography>
+              <Copyright />
+            </Container>
+        </div> */}
       </div>
     </Router>
   );

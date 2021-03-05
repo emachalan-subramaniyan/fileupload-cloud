@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMutation, useQuery, gql, useLazyQuery } from '@apollo/client';
 import { List, ListItem, ListItemIcon, ListItemText, Divider, Paper, Typography, TextField, Button } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import SendIcon from '@material-ui/icons/Send';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { useHistory } from "react-router-dom";
 
 var _ = require('lodash');
 
@@ -50,7 +51,7 @@ const GET_FRIEND_MESSAGES = gql`
 `;
 
 const INSERT_MESSAGES = gql`
-  mutation InsertMesage($userid: uuid, $friendid: uuid, $message: String) {
+  mutation InsertMesage($userid: uuid, $friendid: uuid, $message: String!) {
     insert_messages(objects: {friend_id: $friendid, message: $message, user_id: $userid}) {
       returning {
         id
@@ -89,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
 const UsersList = (props) => {
 
   const classes = useStyles();
+  const history = useHistory();
   const [state, setState] = useState({
     enablePopUp: false,
     friendId: null,
@@ -96,10 +98,11 @@ const UsersList = (props) => {
     Messages: null,
     message: null
   })
+  const inputDataRef = useRef(null);
 
   const { loading: queryLoading, error: queryError, data } = useQuery(GET_USERS);
-  const [fetchMyMessage, { loading: myloading, data: mymessages }] = useLazyQuery(GET_MY_MESSAGES, {pollInterval: 5000});
-  const [fetchFriendMessage, { loading: friendloading, data: friendmessages }] = useLazyQuery(GET_FRIEND_MESSAGES, {pollInterval: 5000});
+  const [fetchMyMessage, { loading: myloading, data: mymessages }] = useLazyQuery(GET_MY_MESSAGES, {pollInterval: 1000});
+  const [fetchFriendMessage, { loading: friendloading, data: friendmessages }] = useLazyQuery(GET_FRIEND_MESSAGES, {pollInterval: 2000});
   const [addMessage, {loading: insertloading, data: insertedData}] = useMutation(INSERT_MESSAGES);
 
   useEffect(() => {
@@ -108,8 +111,11 @@ const UsersList = (props) => {
       setState({
         ...state, userId: userId
       })
-    }
-  }, []);
+    }else{
+      alert("Login First")
+      history.push('/login')
+  }
+  },[]);
 
   useEffect(() => {
       if(insertedData){
@@ -141,12 +147,13 @@ const UsersList = (props) => {
   if (queryError) return `Error! ${queryError.message}`;
 
   const onNameClick = (data) => {
-    setState({ ...state, friendId: data, enablePopUp: true })
+    setState({ ...state, friendId: data, enablePopUp: true, Messages: null })
     fetchMyMessage({ variables: { user_id: state.userId, friend_id: data } })
     fetchFriendMessage({ variables: { user_id: data, friend_id: state.userId } })
   }
 
   const onSubmitMessage = () => {
+    inputDataRef.current.value=null
     addMessage({
       variables: {
         userid: state.userId,
@@ -194,6 +201,7 @@ const UsersList = (props) => {
             <TextField
                 onChange={(event) => setState({...state, message:event.target.value})}
                 id="message"
+                innerRef={inputDataRef}
                 label="Enter Message"
                 variant="outlined"
             />

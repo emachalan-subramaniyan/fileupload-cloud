@@ -5,12 +5,12 @@ import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { Grid, Paper, TextField, Typography, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton,  } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { useHistory } from "react-router-dom";
 
 const INSERT_USER = gql`
-    mutation InsertUser($email: String!, $password: String!) {
-        insert_user(objects: {email: $email, password: $password}) {
+    mutation InsertUser($email: String!, $username: String!, $password: String!) {
+        insert_user(objects: {email: $email, password: $password, username: $username}) {
             returning {
-                email
                 id
             }
         }
@@ -19,13 +19,17 @@ const INSERT_USER = gql`
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
-    },
-    paper: {
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
-        height: '60vh',
+        marginTop: 30
+    },
+    paper: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // height: '60vh',
         width:  "70%",
     },
     control: {
@@ -44,9 +48,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = () => {
 
+    const history = useHistory();
     const classes = useStyles();
     const[state, setState] = useState({
         email: null,
+        username: null,
         password: null,
         showPassword: false,
         confirm_password: null,
@@ -56,7 +62,12 @@ const Register = () => {
 
     useEffect(() => {
         if(data){
-            console.log(data.user)
+            if(data.insert_user && data.insert_user.returning[0] && data.insert_user.returning[0].id){
+                console.log(data,'daa')
+                history.push('/login')
+            }else{
+                alert('Something went wrong')
+            }
         }
     },[data])
 
@@ -66,6 +77,7 @@ const Register = () => {
       if(state.confirm_password === state.password){
           addUser({ variables: {
               email: state.email,
+              username: state.username,
               password: state.password
           } })
       }else{
@@ -88,12 +100,22 @@ const Register = () => {
     return(
         <Grid container className={classes.root}>
             <Paper elevation={3} className={classes.paper}>
+                <div style={{padding: 10}}>
+                    <Typography align="left" variant="h6" style={{fontWeight: 'bold'}}>Enter Your Details</Typography>
+                </div>
                 <form className={classes.form_root} noValidate autoComplete="off">
-                    <Typography align="left" variant="body2">Username</Typography>
+                    <Typography align="left" variant="body2">Email</Typography>
                     <TextField
                         onChange={(event) => onHandleChange('email', event)}
                         id="email"
-                        label="Outlined"
+                        label="Email"
+                        variant="outlined"
+                    />
+                    <Typography align="left" variant="body2">Username</Typography>
+                    <TextField
+                        onChange={(event) => onHandleChange('username', event)}
+                        id="username"
+                        label="Username"
                         variant="outlined"
                     />
                     <Typography align="left" variant="body2">Password</Typography>
@@ -118,10 +140,10 @@ const Register = () => {
                             }
                             labelWidth={70}
                         />
-                        <Typography align="left" variant="body2">Confirm Password</Typography>
                         </FormControl>
+                        <Typography align="left" variant="body2">Confirm Password</Typography>
                         <FormControl className={clsx(classes.margin, classes.textField)} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-password">Confirm Password</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-password"
                             type={state.showCPassword ? 'text' : 'password'}

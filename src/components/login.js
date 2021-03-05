@@ -5,6 +5,7 @@ import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import { Grid, Paper, TextField, Typography, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton,  } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { useHistory } from "react-router-dom";
 
 const SELECT_USER = gql`
 query MyQuery($email: String!, $password: String!) {
@@ -17,10 +18,13 @@ query MyQuery($email: String!, $password: String!) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
+      display: "flex",
+      justifyContent: 'center',
+      marginTop: 30
     },
     paper: {
         display: "flex",
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         height: '60vh',
@@ -50,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Login = () => {
+
+  const history = useHistory();
     const classes = useStyles();
     const[state, setState] = useState({
         email: null,
@@ -64,6 +70,8 @@ const Login = () => {
             console.log(data.user[0].id)
             localStorage.setItem('user_id', data.user[0].id);
             setState({email: null, password: null})
+            history.push('/')
+
         }else{
           alert('login failed')
         }
@@ -95,12 +103,15 @@ const Login = () => {
     return(
         <Grid container className={classes.root}>
             <Paper elevation={3} className={classes.paper}>
+                <div style={{padding: 10}}>
+                    <Typography align="left" variant="h6" style={{fontWeight: 'bold'}}>Login</Typography>
+                </div>
                 <form className={classes.form_root} noValidate autoComplete="off">
-                    <Typography align="left" variant="body2">Username</Typography>
+                    <Typography align="left" variant="body2">Email</Typography>
                     <TextField
                         onChange={(event) => onHandleChange('email', event)}
                         id="email"
-                        label="Outlined"
+                        label="Email"
                         variant="outlined"
                     />
                     <Typography align="left" variant="body2">Password</Typography>
