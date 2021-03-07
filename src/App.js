@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'black'
   },
   footer_div: {
-    backgroundImage: "url(" +"https://www.shopsite.com/templates/cookbook/theme-images/congruence-stripes-blue.jpg"+ ")",
+    backgroundImage: "url(" + "https://www.shopsite.com/templates/cookbook/theme-images/congruence-stripes-blue.jpg" + ")",
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -205,31 +205,58 @@ const App = () => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
+        <Link to="/upload-data" className={classes.link_style1}>
+          <IconButton aria-label="show 4 new mails" color="inherit">
+            <Typography variant="body2" noWrap>
+              Upload Data
+                </Typography>
+          </IconButton>
+        </Link>
       </MenuItem>
       <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
+        <Link to="/about" className={classes.link_style1}>
+          <IconButton aria-label="show 4 new mails" color="inherit">
+            <Typography variant="body2" noWrap>
+              About
+                </Typography>
+          </IconButton>
+        </Link>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
+      <MenuItem>
+        <Link to="/contact" className={classes.link_style1}>
+          <IconButton aria-label="show 4 new mails" color="inherit">
+            <Typography variant="body2" noWrap>
+              Contact
+                </Typography>
+          </IconButton>
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/users-list" className={classes.link_style1}>
+          <IconButton aria-label="show 4 new mails" color="inherit">
+            <Typography variant="body2" noWrap>
+              Users
+                </Typography>
+          </IconButton>
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/login" className={classes.link_style1}>
+          <IconButton aria-label="show 4 new mails" color="inherit">
+            <Typography variant="body2" noWrap>
+              Login
+                </Typography>
+          </IconButton>
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/register" className={classes.link_style1}>
+          <IconButton aria-label="show 4 new mails" color="inherit">
+            <Typography variant="body2" noWrap>
+              Register
+                </Typography>
+          </IconButton>
+        </Link>
       </MenuItem>
     </Menu>
   );
@@ -241,17 +268,17 @@ const App = () => {
       <div className="App">
         <AppBar position="static">
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               edge="start"
               className={classes.menuButton}
               color="inherit"
               aria-label="open drawer"
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Link to="/" className={classes.link_style}>
               <Typography className={classes.title} variant="h6" noWrap>
-                  FileUploader
+                FileUploader
               </Typography>
             </Link>
             <div className={classes.grow} />

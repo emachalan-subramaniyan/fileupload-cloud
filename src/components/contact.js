@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { gql, useLazyQuery, useMutation } from '@apollo/client';
 import AppBar from '@material-ui/core/AppBar';
-import{TextField,  Button }from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -148,41 +148,41 @@ const Contact = () => {
 
   const classes = useStyles();
   const history = useHistory();
-  const[state, setState] = useState({
+  const [state, setState] = useState({
     userid: null,
     message: null
-})
+  })
 
-const [addContact,{ loading, data, error }] = useMutation(INSERT_CONTACT);
+  const [addContact, { loading, data, error }] = useMutation(INSERT_CONTACT);
 
-console.log('log log', data, error);
+  console.log('log log', data, error);
 
 
-useEffect(() => {
+  useEffect(() => {
     const userId = localStorage.getItem('user_id');
     if (userId) {
       setState({
         ...state, userid: userId
       })
-    }else{
-        alert("Login First")
-        history.push('/login')
+    } else {
+      alert("Login First")
+      history.push('/login')
     }
-  },[]);
+  }, []);
 
-useEffect(() => {
-    if(data){
-        if(data.insert_contact && data.insert_contact.returning[0] && data.insert_contact.returning[0].id){
-            console.log(data,'daa');
-            setState({...state, message: null})
-            alert("Insert Successfully")
-        }else{
-            alert('Something went wrong')
-        }
+  useEffect(() => {
+    if (data) {
+      if (data.insert_contact && data.insert_contact.returning[0] && data.insert_contact.returning[0].id) {
+        console.log(data, 'daa');
+        setState({ ...state, message: null })
+        alert("Insert Successfully")
+      } else {
+        alert('Something went wrong')
+      }
     }
-},[data])
+  }, [data])
 
-const onSubmitMessage = () => {
+  const onSubmitMessage = () => {
     addContact({
       variables: {
         userid: state.userid,
@@ -197,91 +197,23 @@ const onSubmitMessage = () => {
       {/* Hero unit */}
       <Container maxWidth="sm" component="main" className={classes.heroContent}>
         <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-          Pricing
+          Contact
         </Typography>
         <Typography variant="h5" align="center" color="textSecondary" component="p">
-          Quickly build an effective pricing table for your potential customers with this layout.
-          It&apos;s built with default Material-UI components with little customization.
+          To take advantage of its success potential, ask for only the most important information, we can interact with you. Because you are important for us
         </Typography>
       </Container>
       <div className={classes.textField_style}>
-            <TextField
-                onChange={(event) => setState({...state, message:event.target.value})}
-                id="message"
-                label="Enter Message"
-                variant="outlined"
-            />
-            <Button variant="contained" color="primary" onClick={() => onSubmitMessage()}>
-                Submit
+        <TextField
+          onChange={(event) => setState({ ...state, message: event.target.value })}
+          id="message"
+          label="Enter Message"
+          variant="outlined"
+        />
+        <Button variant="contained" color="primary" onClick={() => onSubmitMessage()}>
+          Submit
             </Button>
-          </div>
-      {/* End hero unit */}
-      <Container maxWidth="md" component="main">
-        <Grid container spacing={5} alignItems="flex-end">
-          {tiers.map((tier) => (
-            // Enterprise card is full width at sm breakpoint
-            <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
-              <Card>
-                <CardHeader
-                  title={tier.title}
-                  subheader={tier.subheader}
-                  titleTypographyProps={{ align: 'center' }}
-                  subheaderTypographyProps={{ align: 'center' }}
-                  action={tier.title === 'Pro' ? <StarIcon /> : null}
-                  className={classes.cardHeader}
-                />
-                <CardContent>
-                  <div className={classes.cardPricing}>
-                    <Typography component="h2" variant="h3" color="textPrimary">
-                      ${tier.price}
-                    </Typography>
-                    <Typography variant="h6" color="textSecondary">
-                      /mo
-                    </Typography>
-                  </div>
-                  <ul>
-                    {tier.description.map((line) => (
-                      <Typography component="li" variant="subtitle1" align="center" key={line}>
-                        {line}
-                      </Typography>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardActions>
-                  <Button fullWidth variant={tier.buttonVariant} color="primary">
-                    {tier.buttonText}
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-      {/* Footer */}
-      <Container maxWidth="md" component="footer" className={classes.footer}>
-        <Grid container spacing={4} justify="space-evenly">
-          {footers.map((footer) => (
-            <Grid item xs={6} sm={3} key={footer.title}>
-              <Typography variant="h6" color="textPrimary" gutterBottom>
-                {footer.title}
-              </Typography>
-              <ul>
-                {footer.description.map((item) => (
-                  <li key={item}>
-                    <Link href="#" variant="subtitle1" color="textSecondary">
-                      {item}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Grid>
-          ))}
-        </Grid>
-        <Box mt={5}>
-          <Copyright />
-        </Box>
-      </Container>
-      {/* End footer */}
+      </div>
     </React.Fragment>
   );
 }

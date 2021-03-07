@@ -19,6 +19,28 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    headerStyle3: {
+        backgroundImage: "url(" + "https://image.freepik.com/free-vector/file-transfer-map-background-hands-holds-phone-with-uploading-files-flat-design-transferring-documents-two-smartphones_168129-139.jpg" + ")",
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        width: "100%",
+        height: '30vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    headerStyle2: {
+        backgroundImage: "url(" + "https://www.modulebazaar.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/i/file_upload.jpg" + ")",
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        width: "100%",
+        height: '30vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     root: {
         width: '100%',
         // maxWidth: '36ch',
@@ -35,7 +57,9 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '45vh'
+        width: '45vh',
+        height: '40vh',
+        marginRight: 15,
       },
       tabStyle: {
         display: "flex",
@@ -79,15 +103,15 @@ const HomePage = () => {
                                     align="right"
                                     className={classes.textstyle}
                                     color="textPrimary">
-                        Whenever we want to sync the same file in different clients or keep multiple version of the file to provide history of updates to the file. It isn't good idea to always backup and transfer the whole file to and fro as it takes more space!!
+                        Its Main Purpose is to share data and retrieve data from anywhere. So e can implement this project.Feel feee to work.It isn't good idea to always backup and transfer the whole file to and fro as it takes more space!!
                     </Typography>
                 </div>
-                <div className={classes.headerStyle}>
+                <div className={classes.headerStyle3}>
 
                 </div>
             </Paper>
             <Paper elevation={3} className={classes.paperCon}>
-                <div className={classes.headerStyle}>
+                <div className={classes.headerStyle2}>
 
                 </div>
                 <div>
@@ -108,7 +132,7 @@ const HomePage = () => {
                                     align="center"
                                     className={classes.textstyle2}
                                     color="textPrimary">
-                        Whenever we want to sync the same file in different clients or keep multiple version of the file to provide history of updates to the file. It isn't good idea to always backup and transfer the whole file to and fro as it takes more space!!
+                        Use Cloudinary’s durable storage or your own storage bucket to backup and archive assets, complete with version control.
                     </Typography>
                 </Paper>
                 <Paper elevation={3} className={classes.paperCon1}>
@@ -118,7 +142,7 @@ const HomePage = () => {
                                     align="center"
                                     className={classes.textstyle2}
                                     color="textPrimary">
-                        Whenever we want to sync the same file in different clients or keep multiple version of the file to provide history of updates to the file. It isn't good idea to always backup and transfer the whole file to and fro as it takes more space!!
+                        Start small or get unlimited storage and automatically scale up or down, as needed.
                     </Typography>
                 </Paper>
                 <Paper elevation={3} className={classes.paperCon1}>
@@ -128,7 +152,7 @@ const HomePage = () => {
                                     align="center"
                                     className={classes.textstyle2}
                                     color="textPrimary">
-                        Whenever we want to sync the same file in different clients or keep multiple version of the file to provide history of updates to the file. It isn't good idea to always backup and transfer the whole file to and fro as it takes more space!!
+                        All assets that are stored on Cloudinary are always available and supported by our service level agreement (SLA).
                     </Typography>
                 </Paper>
             </div>
@@ -149,7 +173,7 @@ const HomePage = () => {
                                 >
                                     Ali Connors
               </Typography>
-                                {" — I'll be in your neighborhood doing errands this…"}
+                                {" — it's easy way to upload your data"}
                             </React.Fragment>
                         }
                     />
@@ -171,7 +195,7 @@ const HomePage = () => {
                                 >
                                     to Scott, Alex, Jennifer
               </Typography>
-                                {" — Wish I could come, but I'm out of town this…"}
+                                {" — sync with your email and share and retrieve your data anyhere"}
                             </React.Fragment>
                         }
                     />
@@ -193,7 +217,7 @@ const HomePage = () => {
                                 >
                                     Sandra Adams
               </Typography>
-                                {' — Do you have Paris recommendations? Have you ever…'}
+                                {' — communicate with you friends and share link'}
                             </React.Fragment>
                         }
                     />
