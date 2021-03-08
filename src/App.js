@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 // import { useMutation, useQuery, gql } from '@apollo/client';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, IconButton, Typography, Container, Badge, Menu, MenuItem } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import {
   BrowserRouter as Router,
@@ -96,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'black'
   },
   footer_div: {
-    backgroundImage: "url(" + "https://www.shopsite.com/templates/cookbook/theme-images/congruence-stripes-blue.jpg" + ")",
+    backgroundImage: "url(https://www.shopsite.com/templates/cookbook/theme-images/congruence-stripes-blue.jpg)",// eslint-disable-line react-hooks/exhaustive-deps
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -113,33 +109,21 @@ const App = () => {
   const classes = useStyles();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userID, setuserId] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const [state, setState] = useState({
-    file: null,
-    accessToken: null,
-    filepath: null
-  })
 
-  useEffect(async () => {
-    let tokenDetails = await fetch("https://accounts.google.com/o/oauth2/token", {
-      "method": "POST",
-      "body": JSON.stringify({
-        "client_id": '117392774494-cffu7uei4ain553kknt7q5vedda8nc62.apps.googleusercontent.com',
-        "client_secret": '41HR6xp25UlHv94YryRUdptY',
-        "refresh_token": '1//04dYB-he8ezK6CgYIARAAGAQSNwF-L9IrAO0pxmHzpSIAZnCY36AzsSrq3E4fbgJxs_rY-twAxWvRkmAc9AD5REshUCNND6SxWpQ',
-        "grant_type": "refresh_token",
-      })
-    });
-    tokenDetails = await tokenDetails.json();
-    const accessToken = tokenDetails.access_token;
-    console.log('access token', accessToken)
-    if (accessToken) {
-      setState({ ...state, accessToken: accessToken })
+  useEffect(() => {
+    const userId = localStorage.getItem('user_id');
+    if (userId) {
+      setuserId(userId)
+    } else {
+      alert("Login First")
+      history.push('/login')
     }
-  }, [])
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
   const handleProfileMenuOpen = (event) => {
@@ -178,19 +162,6 @@ const App = () => {
   const onLogoutClick = () => {
     localStorage.removeItem("user_id")
     window.location.reload();
-  }
-
-  const Copyright = () => {
-    return (
-      <Typography variant="body2" color="textSecondary">
-        {'Copyright © '}
-        <Link color="inherit" href="https://material-ui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
   }
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -240,7 +211,8 @@ const App = () => {
           </IconButton>
         </Link>
       </MenuItem>
-      <MenuItem>
+      {userID === null &&
+      <><MenuItem>
         <Link to="/login" className={classes.link_style1}>
           <IconButton aria-label="show 4 new mails" color="inherit">
             <Typography variant="body2" noWrap>
@@ -257,11 +229,10 @@ const App = () => {
                 </Typography>
           </IconButton>
         </Link>
-      </MenuItem>
+      </MenuItem></>}
     </Menu>
   );
 
-  // console.log('accesstoken', 'Bearer '+ " " +String(state.accessToken))
 
   return (
     <Router>

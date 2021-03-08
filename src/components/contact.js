@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
-import AppBar from '@material-ui/core/AppBar';
+import { gql, useMutation } from '@apollo/client';
 import { TextField, Button } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import StarIcon from '@material-ui/icons/StarBorder';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
 import { useHistory } from "react-router-dom";
 
 const INSERT_CONTACT = gql`
@@ -26,20 +16,6 @@ const INSERT_CONTACT = gql`
         }
     }  
   `;
-
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -91,59 +67,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const tiers = [
-  {
-    title: 'Free',
-    price: '0',
-    description: ['10 users included', '2 GB of storage', 'Help center access', 'Email support'],
-    buttonText: 'Sign up for free',
-    buttonVariant: 'outlined',
-  },
-  {
-    title: 'Pro',
-    subheader: 'Most popular',
-    price: '15',
-    description: [
-      '20 users included',
-      '10 GB of storage',
-      'Help center access',
-      'Priority email support',
-    ],
-    buttonText: 'Get started',
-    buttonVariant: 'contained',
-  },
-  {
-    title: 'Enterprise',
-    price: '30',
-    description: [
-      '50 users included',
-      '30 GB of storage',
-      'Help center access',
-      'Phone & email support',
-    ],
-    buttonText: 'Contact us',
-    buttonVariant: 'outlined',
-  },
-];
-const footers = [
-  {
-    title: 'Company',
-    description: ['Team', 'History', 'Contact us', 'Locations'],
-  },
-  {
-    title: 'Features',
-    description: ['Cool stuff', 'Random feature', 'Team feature', 'Developer stuff', 'Another one'],
-  },
-  {
-    title: 'Resources',
-    description: ['Resource', 'Resource name', 'Another resource', 'Final resource'],
-  },
-  {
-    title: 'Legal',
-    description: ['Privacy policy', 'Terms of use'],
-  },
-];
-
 const Contact = () => {
 
   const classes = useStyles();
@@ -153,7 +76,7 @@ const Contact = () => {
     message: null
   })
 
-  const [addContact, { loading, data, error }] = useMutation(INSERT_CONTACT);
+  const [addContact, { data, error }] = useMutation(INSERT_CONTACT);
 
   console.log('log log', data, error);
 
@@ -168,7 +91,7 @@ const Contact = () => {
       alert("Login First")
       history.push('/login')
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (data) {
@@ -180,7 +103,7 @@ const Contact = () => {
         alert('Something went wrong')
       }
     }
-  }, [data])
+  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSubmitMessage = () => {
     addContact({

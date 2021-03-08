@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useEffect }  from 'react';
 import GooglePicker from 'react-google-picker';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
@@ -31,7 +31,7 @@ const UploadData = (props) => {
       alert("Login First")
       history.push('/login')
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return(
       <Paper className={classes.paper_style} elevation={3}>
@@ -64,7 +64,7 @@ const UploadData = (props) => {
                 if (data.action === google.picker.Action.PICKED) {
                     var fileId = data.docs[0].id;
                     console.log('The user selected: ' + fileId, data.docs[0].url);
-                    alert('copy this link and send to you friends'+"("+data.docs[0].url+")")
+                    alert('copy this link and send to you friends ('+data.docs[0].url+")")
                     // picker();
                 }
               });

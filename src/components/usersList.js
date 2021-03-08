@@ -101,9 +101,9 @@ const UsersList = (props) => {
   const inputDataRef = useRef(null);
 
   const { loading: queryLoading, error: queryError, data } = useQuery(GET_USERS);
-  const [fetchMyMessage, { loading: myloading, data: mymessages }] = useLazyQuery(GET_MY_MESSAGES, {pollInterval: 1000});
-  const [fetchFriendMessage, { loading: friendloading, data: friendmessages }] = useLazyQuery(GET_FRIEND_MESSAGES, {pollInterval: 2000});
-  const [addMessage, {loading: insertloading, data: insertedData}] = useMutation(INSERT_MESSAGES);
+  const [fetchMyMessage, { data: mymessages }] = useLazyQuery(GET_MY_MESSAGES, {pollInterval: 1000});
+  const [fetchFriendMessage, { data: friendmessages }] = useLazyQuery(GET_FRIEND_MESSAGES, {pollInterval: 2000});
+  const [addMessage, { data: insertedData }] = useMutation(INSERT_MESSAGES);
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
@@ -115,7 +115,7 @@ const UsersList = (props) => {
       alert("Login First")
       history.push('/login')
   }
-  },[]);
+  },[]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
       if(insertedData){
@@ -128,7 +128,7 @@ const UsersList = (props) => {
           // refetchFrdMsg({variables: { user_id: data, friend_id: state.userId }})
         }
       }
-  },[insertedData])
+  },[insertedData]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (mymessages && friendmessages) {
@@ -139,9 +139,9 @@ const UsersList = (props) => {
       setState({ ...state, Messages: sortedArray })
       console.log('mymessages && friendmessages', outcome, sortedArray)
     }
-  }, [mymessages && friendmessages])
+  }, [mymessages && friendmessages]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log('user list', state.Messages);
+  // console.log('user list', state.Messages);
 
   if (queryLoading) return 'Loading...';
   if (queryError) return `Error! ${queryError.message}`;

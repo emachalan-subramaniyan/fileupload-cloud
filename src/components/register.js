@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { Grid, Paper, TextField, Typography, Button, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton,  } from '@material-ui/core';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -69,7 +69,7 @@ const Register = () => {
                 alert('Something went wrong')
             }
         }
-    },[data])
+    },[data]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return <p>Loading ...</p>;
 

@@ -1,6 +1,17 @@
-import React from 'react';
+import React, {useState, useEffect}from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { gql, useLazyQuery } from '@apollo/client';
 import { Container, ListItem, List, Divider, ListItemText, Paper, ListItemAvatar, Avatar, Typography,  } from '@material-ui/core';
+
+const SELECT_USER = gql`
+query MyQuery($id: uuid) {
+    user(where: {id: {_eq: $id}}) {
+      id
+      username
+      email
+    }
+  }
+  `;
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -9,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column'
     },
     headerStyle: {
-        backgroundImage: "url(" + "https://images.pexels.com/photos/34153/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" + ")",
+        backgroundImage: "url(https://images.pexels.com/photos/34153/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350)", // eslint-disable-line prefer-template
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -20,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center'
     },
     headerStyle3: {
-        backgroundImage: "url(" + "https://image.freepik.com/free-vector/file-transfer-map-background-hands-holds-phone-with-uploading-files-flat-design-transferring-documents-two-smartphones_168129-139.jpg" + ")",
+        backgroundImage: "url(https://image.freepik.com/free-vector/file-transfer-map-background-hands-holds-phone-with-uploading-files-flat-design-transferring-documents-two-smartphones_168129-139.jpg)", // eslint-disable-line prefer-template
         backgroundPosition: 'center',
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
@@ -31,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center'
     },
     headerStyle2: {
-        backgroundImage: "url(" + "https://www.modulebazaar.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/i/file_upload.jpg" + ")",
+        backgroundImage: "url(https://www.modulebazaar.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/f/i/file_upload.jpg)", // eslint-disable-line prefer-template
         backgroundPosition: 'center',
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
@@ -89,12 +100,42 @@ const useStyles = makeStyles((theme) => ({
 const HomePage = () => {
 
     const classes = useStyles();
+    const [getUser, { loading, data, error }] = useLazyQuery(SELECT_USER);
+    const[state,setState] = useState({
+        userDetails: null,
+        userId: null
+    })
+
+    console.log('getuser details', loading, data,error);
+
+    useEffect(() => {
+        if(data){
+            if(data && data.user && data.user[0] && data.user[0].id){
+                setState({...state, userDetails: data.user[0]})
+            }
+        }
+    },[data]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        const userId = localStorage.getItem('user_id');
+        if (userId) {
+            console.log('user id', userId);
+          setState({...state, userId: userId});
+            getUser({ variables: {
+                id: userId
+            } })
+        } else {
+            console.log('no id found');
+        //   alert("Login First")
+        //   history.push('/login')
+        }
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className={classes.container}>
             <Container maxWidth="lg">
             <div className={classes.headerStyle}>
-                <Typography style={{ color: 'white' }} align="left" variant="h5">Username</Typography>
+                <Typography style={{ color: 'white' }} align="left" variant="h5">{ state.userDetails ? "Hi " + state.userDetails.username : "FileTransfer" }</Typography>
             </div>
             <Paper elevation={3} className={classes.paperCon}>
                 <div>
