@@ -9,8 +9,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  useHistory
+  Link
 } from "react-router-dom";
 import UploadData from './components/uploadData';
 import About from './components/about';
@@ -107,7 +106,6 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
 
   const classes = useStyles();
-  const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const [userID, setuserId] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -120,11 +118,10 @@ const App = () => {
     if (userId) {
       setuserId(userId)
     } else {
-      alert("Login First")
-      history.push('/login')
+      // alert("Login First")
+      // history.push('/login')
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -155,7 +152,7 @@ const App = () => {
       onClose={handleMenuClose}
     >
       <Link to="/my-profile" className={classes.link_style1}><MenuItem>Profile</MenuItem></Link>
-      <MenuItem onClick={() => onLogoutClick()}>Logout</MenuItem>
+      {userID !== null && <MenuItem onClick={() => onLogoutClick()}>Logout</MenuItem> }
     </Menu>
   );
 
@@ -211,7 +208,7 @@ const App = () => {
           </IconButton>
         </Link>
       </MenuItem>
-      {userID === null &&
+      {userID === null ?
       <><MenuItem>
         <Link to="/login" className={classes.link_style1}>
           <IconButton aria-label="show 4 new mails" color="inherit">
@@ -229,7 +226,14 @@ const App = () => {
                 </Typography>
           </IconButton>
         </Link>
-      </MenuItem></>}
+      </MenuItem></> :
+      <MenuItem onClick={() => onLogoutClick()}>
+      <IconButton aria-label="show 4 new mails" color="inherit">
+        <Typography variant="body2" noWrap>
+          Logout
+            </Typography>
+      </IconButton>
+  </MenuItem>}
     </Menu>
   );
 
@@ -275,7 +279,8 @@ const App = () => {
                 </Typography>
                 </IconButton>
               </Link>
-              <Link to="/login" className={classes.link_style}>
+              {userID === null &&
+              <><Link to="/login" className={classes.link_style}>
                 <IconButton aria-label="show 4 new mails" color="inherit">
                   <Typography variant="body2" noWrap>
                     Login
@@ -288,7 +293,7 @@ const App = () => {
                     Register
                 </Typography>
                 </IconButton>
-              </Link>
+              </Link></>}
               <Link to="/users-list" className={classes.link_style}>
                 <IconButton aria-label="show 4 new mails" color="inherit">
                   <Typography variant="body2" noWrap>
