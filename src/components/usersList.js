@@ -22,7 +22,6 @@ const GET_MY_MESSAGES = gql`
     query MyQuery($user_id: uuid, $friend_id: uuid) {
       messages(where: {user_id: {_eq: $user_id}, friend_id: {_eq: $friend_id}}) {
         message
-        attime
         user {
           id,
           username
@@ -39,7 +38,6 @@ const GET_FRIEND_MESSAGES = gql`
     query FriendQuery($user_id: uuid, $friend_id: uuid) {
       messages(where: {user_id: {_eq: $user_id}, friend_id: {_eq: $friend_id}}) {
         message
-        attime
         user {
           username
         }
@@ -119,10 +117,10 @@ const UsersList = (props) => {
 
   useEffect(() => {
       if(insertedData){
-        console.log('insertedData', insertedData)
         if(insertedData.insert_messages && insertedData.insert_messages.returning && insertedData.insert_messages.returning[0] && insertedData.insert_messages.returning[0].id){
+          console.log('insertedData', insertedData)
           setState({
-            ...state, message: null
+            ...state, message: null, enablePopUp: false
           });
           // refetchmyMsg({variables: { user_id: state.userId, friend_id: data }})
           // refetchFrdMsg({variables: { user_id: data, friend_id: state.userId }})
@@ -141,12 +139,13 @@ const UsersList = (props) => {
     }
   }, [mymessages && friendmessages]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // console.log('user list', state.Messages);
+  console.log('user list', state.userId);
 
   if (queryLoading) return 'Loading...';
   if (queryError) return `Error! ${queryError.message}`;
 
   const onNameClick = (data) => {
+    console.log('/////',data)
     setState({ ...state, friendId: data, enablePopUp: true, Messages: null })
     fetchMyMessage({ variables: { user_id: state.userId, friend_id: data } })
     fetchFriendMessage({ variables: { user_id: data, friend_id: state.userId } })
